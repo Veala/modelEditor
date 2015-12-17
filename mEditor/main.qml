@@ -11,7 +11,7 @@ ApplicationWindow {
     visible: true
 
     function createObject() {
-        listModel.append(Rectangle { "color": "yellow" });//, "name": "Pizza"})
+        listModel.append({ "color": "yellow", "name": "Pizza"})
     }
 
     Action {
