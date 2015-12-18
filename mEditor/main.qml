@@ -11,7 +11,10 @@ ApplicationWindow {
     visible: true
 
     function createObject() {
-        listModel.append({ "color": "yellow", "name": "Pizza"})
+        editor.visible = true
+        modelName.append({ "name": ""})
+        for (var i=0; i<modelName.count; i++)
+            editor.model.append(modelName.get(i) )
     }
 
     Action {
@@ -23,7 +26,7 @@ ApplicationWindow {
         id: delObj
         text: "Удалить объект/ы"
         enabled: {
-            if (listModel.count == 0) false
+            if (modelName.count == 0) false
             else true
         }
 
@@ -33,7 +36,7 @@ ApplicationWindow {
         id: exportObj
         text: "Экспорт..."
         enabled: {
-            if (listModel.count == 0) false
+            if (modelName.count == 0) false
             else true
         }
         onTriggered: messageDialog.show("Ya!");
@@ -72,42 +75,75 @@ ApplicationWindow {
         }
     }
 
-    MessageDialog {
-        id: messageDialog
-        title: qsTr("May I have your attention, please?")
-
-        function show(caption) {
-            messageDialog.text = caption;
-            messageDialog.open();
-        }
+    Editor {
+        id: editor
     }
 
-    ListView {
-        id: listView
-        anchors.fill: parent
-//        delegate: Item {
-//            id: _delegate
-//            x: 5
-//            width: 80
-//            height: 40
-//            Row {
-//                id: row1
-//                spacing: 10
-//                Rectangle {
-//                    width: 40
-//                    height: 40
-//                    color: colorx
-//                }
+//    Window {
+//        id: editor
+//        title: "Редактор объекта"
+//        modality: Qt.ApplicationModal
+//        color: "yellow"
+//        visible: false
+//        height: 100
+//        width: 300
 
-//                Text {
-//                    text: name
-//                    font.bold: true
-//                    anchors.verticalCenter: parent.verticalCenter
-//                }
+//        TableView {
+//            id: viewProp
+//            anchors.fill: parent
+//            anchors.margins: 5
+//            TableViewColumn {
+//                role: "property"
+//                title: "Названия св-в"
+//                width: 100
+//            }
+//            TableViewColumn {
+//                role: "value"
+//                title: "Значение"
+//                width: 200
+//            }
+////            delegate: Row {
+////                id: delegateProp
+////                width: 80; height: 20
+////                border.color: "gray"
+////                color: "yellow"
+////                Text {
+////                    anchors.fill: parent
+////                    horizontalAlignment: Text.AlignHCenter
+////                    verticalAlignment: Text.AlignVCenter
+////                    text: name
+////                }
+////            }
+//            model: ListModel {
+//                id: modelProp
 //            }
 //        }
+
+//        function show(caption) {
+//            messageDialog.text = caption;
+//            messageDialog.open();
+//        }
+//    }
+
+    ListView {
+        id: viewName
+        anchors.fill: parent
+        anchors.margins: 5
+        spacing: 3
+        delegate: Rectangle {
+            id: delegateName
+            width: 80; height: 20
+            border.color: "gray"
+            color: "yellow"
+            Text {
+                anchors.fill: parent
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                text: name
+            }
+        }
         model: ListModel {
-            id: listModel
+            id: modelName
         }
     }
 }
