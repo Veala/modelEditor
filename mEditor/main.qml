@@ -9,12 +9,22 @@ ApplicationWindow {
     width: 640
     height: 480
     visible: true
+    id: backend
+    property Editor curEditor
 
     function createObject() {
-        editor.visible = true
+        loader.source = "Editor.qml"
+        curEditor = loader.item
+        curEditor.visible = true
         modelName.append({ "name": ""})
-        for (var i=0; i<modelName.count; i++)
-            editor.model.append(modelName.get(i) )
+        //for (var i=0; i<modelName.count; i++)
+            //editor.model.append(modelName.get(i) )
+    }
+
+    onActiveChanged: {
+        if (active) {
+            loader.source = ""
+        }
     }
 
     Action {
@@ -75,55 +85,9 @@ ApplicationWindow {
         }
     }
 
-    Editor {
-        id: editor
+    Loader {
+        id: loader
     }
-
-//    Window {
-//        id: editor
-//        title: "Редактор объекта"
-//        modality: Qt.ApplicationModal
-//        color: "yellow"
-//        visible: false
-//        height: 100
-//        width: 300
-
-//        TableView {
-//            id: viewProp
-//            anchors.fill: parent
-//            anchors.margins: 5
-//            TableViewColumn {
-//                role: "property"
-//                title: "Названия св-в"
-//                width: 100
-//            }
-//            TableViewColumn {
-//                role: "value"
-//                title: "Значение"
-//                width: 200
-//            }
-////            delegate: Row {
-////                id: delegateProp
-////                width: 80; height: 20
-////                border.color: "gray"
-////                color: "yellow"
-////                Text {
-////                    anchors.fill: parent
-////                    horizontalAlignment: Text.AlignHCenter
-////                    verticalAlignment: Text.AlignVCenter
-////                    text: name
-////                }
-////            }
-//            model: ListModel {
-//                id: modelProp
-//            }
-//        }
-
-//        function show(caption) {
-//            messageDialog.text = caption;
-//            messageDialog.open();
-//        }
-//    }
 
     ListView {
         id: viewName

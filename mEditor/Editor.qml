@@ -14,6 +14,14 @@ Window {
     width: 300
     property alias model: modelProp
 
+    Component.onCompleted: {
+        console.log("Waaa comleted");
+    }
+    Component.onDestruction: {
+        console.log("Waaa destroyed");
+    }
+
+
     TableView {
         id: viewProp
         anchors.fill: parent
@@ -31,6 +39,8 @@ Window {
         model: ListModel {
             id: modelProp
         }
+
     }
+
 }
 
