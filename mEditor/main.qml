@@ -11,14 +11,13 @@ ApplicationWindow {
     visible: true
     id: backend
     property Editor curEditor
+    property int number: 0
 
     function createObject() {
         loader.source = "Editor.qml"
         curEditor = loader.item
         curEditor.visible = true
-        modelName.append({ "name": ""})
-        //for (var i=0; i<modelName.count; i++)
-            //editor.model.append(modelName.get(i) )
+        listModel.append({ "name": ""})
     }
 
     onActiveChanged: {
@@ -36,17 +35,16 @@ ApplicationWindow {
         id: delObj
         text: "Удалить объект/ы"
         enabled: {
-            if (modelName.count == 0) false
+            if ((listModel.count == 0) || (number == 0)) false
             else true
         }
-
         onTriggered: messageDialog.show("Ya!");
     }
     Action {
         id: exportObj
         text: "Экспорт..."
         enabled: {
-            if (modelName.count == 0) false
+            if (listModel.count == 0) false
             else true
         }
         onTriggered: messageDialog.show("Ya!");
@@ -56,6 +54,16 @@ ApplicationWindow {
         text: "Импорт..."
         onTriggered: messageDialog.show("Ya!");
     }
+    Action {
+        id: editObj
+        text: "Редактировать..."
+        enabled: {
+            if ((listModel.count == 0) || (number != 1)) false
+            else true
+        }
+        onTriggered: messageDialog.show("Ya!");
+    }
+
 
     menuBar: MenuBar {
         Menu {
@@ -77,11 +85,12 @@ ApplicationWindow {
     toolBar: ToolBar {
         RowLayout {
             anchors.fill: parent
-            ToolButton {    action: createObj   }
-            ToolButton {    action: delObj      }
-            ToolButton {    action: exportObj   }
-            ToolButton {    action: importObj   }
-            Item { Layout.fillWidth: true }
+            ToolButton {    action: createObj       }
+            ToolButton {    action: delObj          }
+            ToolButton {    action: exportObj       }
+            ToolButton {    action: importObj       }
+            ToolButton {    action: editObj         }
+            Item       {    Layout.fillWidth: true  }
         }
     }
 
@@ -90,24 +99,41 @@ ApplicationWindow {
     }
 
     ListView {
-        id: viewName
+        id: listView
         anchors.fill: parent
         anchors.margins: 5
         spacing: 3
+        model: ListModel {
+            id: listModel
+        }
         delegate: Rectangle {
-            id: delegateName
+            id: delegate_x
             width: 80; height: 20
+            radius: 5
             border.color: "gray"
             color: "yellow"
             Text {
                 anchors.fill: parent
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
-                text: name
+                text: "Name: " + name
+            }
+            MouseArea {
+                id: mouseArea
+                acceptedButtons: Qt.LeftButton | Qt.RightButton
+                anchors.fill: parent
+                //index - от элемента идет так же как и name
+                onClicked: {
+                    if(delegate_x.color == "#ffff00") { //yellow
+                        delegate_x.color = "lightsteelblue"; number++
+                    } else {
+                        delegate_x.color = "yellow"; number--
+                    }
+                }
             }
         }
-        model: ListModel {
-            id: modelName
-        }
+
+        //highlight: Rectangle { color: "lightsteelblue"; radius: 5 }
+        //focus: true
     }
 }

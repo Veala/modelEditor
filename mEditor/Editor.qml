@@ -21,7 +21,6 @@ Window {
         console.log("Waaa destroyed");
     }
 
-
     TableView {
         id: viewProp
         anchors.fill: parent
